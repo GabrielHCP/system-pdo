@@ -1,0 +1,18 @@
+{
+    "name": "gabrielcamargo/admin",
+    "autoload": {
+        "files": [
+            "includes/helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "GabrielHCP",
+            "email": "gabrielcanal360@gmail.com"
+        }
+    ],
+    "require": {
+        "bramus/router": "^1.6",
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
