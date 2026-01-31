@@ -23,3 +23,27 @@ function tentar_login($pdo, $email, $senha) {
 
     return false;
 }
+
+/**
+ * Verifica a empresa do cliente e seta corretamente na sessão
+ */
+function processar_login_dinamico($pdo) {
+
+    $email = $_POST['email'] ?? '';
+    $senha = $_POST['senha'] ?? '';
+
+    $usuario = tentar_login($pdo, $email, $senha);
+
+    if ($usuario) {
+        // SETAMOS A SESSÃO COM OS DADOS REAIS DO BANCO (Ignorando a URL)
+        $_SESSION['usuario_id']   = $usuario['id'];
+        $_SESSION['usuario_nome'] = $usuario['nome'];
+        $_SESSION['empresa_id']   = $usuario['empresa_id'];
+        $_SESSION['empresa_nome'] = $usuario['empresa_nome'];
+        
+        // Buscamos o slug real da empresa do usuário para o dashboard
+        redirect('/app/dashboard');
+    } else {
+        redirect('/?erro=1');
+    }
+}

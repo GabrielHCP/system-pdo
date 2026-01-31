@@ -8,18 +8,33 @@ require_once __DIR__ . '/../includes/db.php';
 $router = new \Bramus\Router\Router();
 
 // --- Área pública ---
-$router->get('/', function() {
-    echo "<h1>Página Inicial / Landing Page</h1> <a href='/'>Login</a>";
+
+// Rota que aceita / (raiz) ou /{slug}
+$router->get('/{slug}?', function($slug = null) use ($pdo) {
+
+    // Se não vier nada no slug, assume 'hedder'
+    $slugAtual = empty($slug) ? 'hedder' : $slug;
+
+    load_module('Empresa/tenant');
+    $empresa = buscar_empresa_por_slug($pdo, $slugAtual);
+
+    if (!$empresa) {
+        // Se o cara digitou /empresa-fantasma, manda para a padrão
+        redirect('/');
+    }
+
+    view('login', [
+        'empresa' => $empresa,
+        'titulo'  => 'Login - ' . $empresa['nome']
+    ]);
+
 });
 
 // Processa o envio formulário
 $router->post('/', function() use ($pdo) {
 
-    // Carrega o módulo
-    load_module('Auth/auth');
-
-
-
+    dd($_POST);
+    
 });
 
 /**

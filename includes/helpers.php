@@ -41,3 +41,40 @@ function load_module($modulePath) {
         die("Erro crítico: O módulo de lógica '{$modulePath}' não foi encontrado.");
     }
 }
+
+/**
+ * Carrega um componente da pasta templates
+ * Exemplo: templates('header', ['titulo' => 'Dashboard']);
+ */
+function templates($name, $data = []) {
+    // Transforma as chaves do array em variáveis (ex: $data['titulo'] vira $titulo)
+    extract($data);
+
+    $file = __DIR__ . '/../templates/' . $name . '.php';
+
+    if (file_exists($file)) {
+        require_once $file;
+    } else {
+        die("Erro: Template '{$name}' não encontrado em templates/.");
+    }
+}
+
+/**
+ * Carrega uma view da pasta views
+ * Exemplo: view('dashboard', ['usuarios' => $lista]);
+ */
+function view($name, $data = []) {
+    // Torna a conexão com o banco disponível dentro da view
+    global $pdo;
+
+    // Transforma chaves do array em variáveis (ex: ['nome' => 'Gabriel'] vira $nome)
+    extract($data);
+
+    $file = __DIR__ . '/../views/' . $name . '.php';
+
+    if (file_exists($file)) {
+        require_once $file;
+    } else {
+        die("Erro crítico: A view '{$name}' não foi encontrada na pasta views/.");
+    }
+}

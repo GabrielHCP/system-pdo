@@ -17,6 +17,8 @@ $options = [
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     // Desativa a emulação de prepared statements (usa a do MySQL, mais seguro)
     PDO::ATTR_EMULATE_PREPARES   => false,
+    // Verifica se já existe uma conexão
+    PDO::ATTR_PERSISTENT         => true,
 ];
 
 try {
