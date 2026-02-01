@@ -14,6 +14,9 @@
                 <?php endif; ?>
 
                 <form action="/" method="POST">
+
+                    <?= csrf_field(); ?>
+
                     <div class="mb-3">
                         <label for="email" class="form-label">E-mail</label>
                         <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="seu@email.com" required autofocus>

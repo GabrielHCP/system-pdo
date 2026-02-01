@@ -78,3 +78,27 @@ function view($name, $data = []) {
         die("Erro crítico: A view '{$name}' não foi encontrada na pasta views/.");
     }
 }
+
+/**
+ * Gera um token CSRF se não existir e retorna o campo HTML oculto
+ */
+function csrf_field() {
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return '<input type="hidden" name="csrf_token" value="' . $_SESSION['csrf_token'] . '">';
+}
+
+/**
+ * Valida o token CSRF enviado via POST
+ */
+function check_csrf_token() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $token = $_POST['csrf_token'] ?? '';
+        if (!$token || $token !== ($_SESSION['csrf_token'] ?? '')) {
+            // Em Penápolis ou em qualquer lugar, segurança em primeiro lugar:
+            header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
+            die("Erro de validação CSRF. A requisição parece maliciosa.");
+        }
+    }
+}
