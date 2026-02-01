@@ -3,7 +3,6 @@
 
 // Basta carregar o init e as configurações de banco
 require_once __DIR__ . '/../includes/init.php';
-require_once __DIR__ . '/../includes/db.php'; 
 
 $router = new \Bramus\Router\Router();
 

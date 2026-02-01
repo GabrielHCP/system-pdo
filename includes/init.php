@@ -29,4 +29,4 @@ try {
 require_once __DIR__ . '/db.php';
 
 // 6. Definição de constantes úteis
-define('URL_BASE', $_ENV['URL_BASE'] ?? 'http://localhost/admin/public');
+define('URL_BASE', $_ENV['URL_BASE'] ?? 'http://localhost:8080/admin/public');
