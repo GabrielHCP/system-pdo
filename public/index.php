@@ -7,12 +7,12 @@ require_once __DIR__ . '/../includes/init.php';
 $router = new \Bramus\Router\Router();
 
 // Middleware Global para proteger todos os POSTs do sistema
-$router->before('POST', '/.*', function() {
+$router->before('POST', '/.*', function(){
     check_csrf_token();
 });
 
 // Processa o envio formulário
-$router->post('/', function() use ($pdo) {
+$router->post('/', function() use ($pdo){
 
     // Carrega módulo de Auth
     load_module('Auth/auth');
@@ -46,20 +46,47 @@ $router->before('GET|POST', '/app/.*', function(){
 $router->get('/app/dashboard', function(){
     
     view('dashboard');
+
+});
+
+// Rota de Financeiro
+$router->get('/app/financeiro', function() use ($pdo){
+
+    // Carrega o módulo de financeiro
+    load_module('Financeiro/financeiro');
+
+    // Busca os clientes da empresa logada
+    $clientes = buscar_clientes_empresa($pdo);
+
+    view('financeiro', [
+         'clientes' => $clientes
+    ]);
+
+});
+
+// Rota que processa envio do formulário financeiro
+$router->post('/app/financeiro/salvar', function() use ($pdo){
+    
+    // Carrega módulo de financeiro
+    load_module('Financeiro/financeiro');
+
+    // Salvando ou editando fatura
+    salvar_fatura($pdo, $_POST);
+
+    
 });
 
 // Rota de Logout
-$router->get('/logout', function() {
+$router->get('/logout', function(){
     session_destroy();
     redirect('/');
 });
-
 
 /** 
  * Rota que aceita / (raiz) ou /{slug}
  * Foi movida aqui para baixo porque estava conflitando com outras rotas
 */
-$router->get('/{slug}?', function($slug = null) use ($pdo) {
+$router->get('/{slug}?', function($slug = null) use ($pdo){
 
     // Se não vier nada no slug, assume 'hedder'
     $slugAtual = empty($slug) ? 'hedder' : $slug;
@@ -80,7 +107,7 @@ $router->get('/{slug}?', function($slug = null) use ($pdo) {
 });
 
 // 404 - Página não encontrada
-$router->set404(function() {
+$router->set404(function(){
     header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
     echo "Página não encontrada!";
 });
